@@ -16,6 +16,7 @@ import {
   BarChart3,
   ShieldAlert,
   Settings,
+  UserCheck,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -34,7 +35,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     roles: string[];
   }
 
-  const sections: { title: string; items: NavItem[] }[] = [
+  interface NavSection {
+    title: string;
+    roles?: string[];
+    items: NavItem[];
+  }
+
+  const sections: NavSection[] = [
     {
       title: 'Overview',
       items: [
@@ -42,39 +49,51 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       ],
     },
     {
-      title: 'Property & Spaces',
+      title: role === 'MAINTENANCE' ? 'Facilities & Spaces' : 'Property & Spaces',
+      roles: ['MALL_OWNER', 'MALL_MANAGER', 'MAINTENANCE'],
       items: [
         { label: 'Floors & Sections', path: '/floors', icon: Layers, roles: ['MALL_OWNER', 'MALL_MANAGER'] },
         { label: 'Shops Directory', path: '/shops', icon: Store, roles: ['MALL_OWNER', 'MALL_MANAGER', 'MAINTENANCE'] },
-        { label: 'Visual Floor Plan', path: '/floor-plan', icon: Map, roles: ['MALL_OWNER', 'MALL_MANAGER'] },
+        { label: 'Visual Floor Plan', path: '/floor-plan', icon: Map, roles: ['MALL_OWNER', 'MALL_MANAGER', 'MAINTENANCE'] },
       ],
     },
     {
-      title: 'Tenancy',
+      title: role === 'ACCOUNTANT' ? 'Tenancy Accounts' : 'Tenancy & Leasing',
+      roles: ['MALL_OWNER', 'MALL_MANAGER', 'ACCOUNTANT'],
       items: [
         { label: 'Tenants Directory', path: '/tenants', icon: Users, roles: ['MALL_OWNER', 'MALL_MANAGER', 'ACCOUNTANT'] },
-        { label: role === 'TENANT' ? 'My Leases' : 'Leases & Contracts', path: '/leases', icon: FileText, roles: ['MALL_OWNER', 'MALL_MANAGER', 'TENANT'] },
+        { label: 'Leases & Contracts', path: '/leases', icon: FileText, roles: ['MALL_OWNER', 'MALL_MANAGER'] },
       ],
     },
     {
-      title: 'Finance & Ledger',
+      title: role === 'TENANT' ? 'My Finances' : 'Finance & Ledger',
+      roles: ['MALL_OWNER', 'MALL_MANAGER', 'ACCOUNTANT', 'TENANT'],
       items: [
         { label: role === 'TENANT' ? 'My Invoices' : 'Invoices & Billing', path: '/billing', icon: CreditCard, roles: ['MALL_OWNER', 'MALL_MANAGER', 'ACCOUNTANT', 'TENANT'] },
-        { label: role === 'TENANT' ? 'Payment History' : 'Payments & Receipts', path: '/payments', icon: Receipt, roles: ['MALL_OWNER', 'ACCOUNTANT', 'TENANT'] },
+        { label: role === 'TENANT' ? 'Payment History' : 'Payments & Receipts', path: '/payments', icon: Receipt, roles: ['MALL_OWNER', 'MALL_MANAGER', 'ACCOUNTANT', 'TENANT'] },
       ],
     },
     {
-      title: 'Operations',
+      title: role === 'TENANT' ? 'Store Operations' : 'Operations & Service',
+      roles: ['MALL_OWNER', 'MALL_MANAGER', 'MAINTENANCE', 'TENANT'],
       items: [
-        { label: 'Maintenance', path: '/maintenance', icon: Wrench, roles: ['MALL_OWNER', 'MALL_MANAGER', 'MAINTENANCE', 'TENANT'] },
-        { label: 'Announcements', path: '/announcements', icon: Megaphone, roles: ['MALL_OWNER', 'MALL_MANAGER', 'MAINTENANCE', 'TENANT'] },
+        { label: role === 'TENANT' ? 'Service Requests' : 'Maintenance Tickets', path: '/maintenance', icon: Wrench, roles: ['MALL_OWNER', 'MALL_MANAGER', 'MAINTENANCE', 'TENANT'] },
+        { label: 'Mall Announcements', path: '/announcements', icon: Megaphone, roles: ['MALL_OWNER', 'MALL_MANAGER', 'MAINTENANCE', 'TENANT'] },
       ],
     },
     {
-      title: 'Governance & Analytics',
+      title: 'Records & Analytics',
+      roles: ['MALL_OWNER', 'MALL_MANAGER', 'ACCOUNTANT'],
       items: [
-        { label: 'Documents', path: '/documents', icon: FolderLock, roles: ['MALL_OWNER', 'MALL_MANAGER', 'TENANT'] },
+        { label: 'Documents & Leases', path: '/documents', icon: FolderLock, roles: ['MALL_OWNER', 'MALL_MANAGER'] },
         { label: 'Reports & Export', path: '/reports', icon: BarChart3, roles: ['MALL_OWNER', 'MALL_MANAGER', 'ACCOUNTANT'] },
+      ],
+    },
+    {
+      title: 'Executive Governance',
+      roles: ['MALL_OWNER'],
+      items: [
+        { label: 'User Approvals', path: '/users', icon: UserCheck, roles: ['MALL_OWNER'] },
         { label: 'Audit Logs', path: '/audit-logs', icon: ShieldAlert, roles: ['MALL_OWNER'] },
         { label: 'Mall Settings', path: '/settings', icon: Settings, roles: ['MALL_OWNER'] },
       ],
@@ -98,6 +117,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       >
         <div className="p-4 space-y-6">
           {sections.map((section) => {
+            if (section.roles && !section.roles.includes(role)) return null;
             const visibleItems = section.items.filter((item) => item.roles.includes(role));
             if (visibleItems.length === 0) return null;
 

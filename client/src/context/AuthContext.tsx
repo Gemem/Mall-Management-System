@@ -6,9 +6,12 @@ interface AuthContextType {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  register: (data: { email: string; password: string; name: string; role?: string; phone?: string; tenantId?: string }) => Promise<{ message: string; user: any }>;
   logout: () => void;
   switchDemoRole: (role: UserRole) => Promise<void>;
   demoAccounts: any[];
+  isOwner: boolean;
+  isManager: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,11 +34,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       try {
         const token = api.getToken();
         if (token) {
+          // Session is saved in localStorage - restore profile automatically
           const profile = await api.getCurrentUser();
           setUser(profile);
         } else {
-          // Default to Owner for initial seamless demonstration
-          await login(DEMO_CREDENTIALS.MALL_OWNER.email, DEMO_CREDENTIALS.MALL_OWNER.pass);
+          // No saved session - user must log in
+          setUser(null);
         }
       } catch (err) {
         console.warn('Initial session check failed, resetting:', err);
@@ -66,6 +70,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const register = async (data: { email: string; password: string; name: string; role?: string; phone?: string; tenantId?: string }) => {
+    return api.register(data);
+  };
+
   const logout = () => {
     api.setToken(null);
     setUser(null);
@@ -78,8 +86,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const isOwner = user?.role === 'MALL_OWNER';
+  const isManager = user?.role === 'MALL_MANAGER';
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout, switchDemoRole, demoAccounts }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout, switchDemoRole, demoAccounts, isOwner, isManager }}>
       {children}
     </AuthContext.Provider>
   );

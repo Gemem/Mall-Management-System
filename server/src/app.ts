@@ -23,6 +23,7 @@ import { reportRoutes } from './routes/reportRoutes.js';
 import { dashboardRoutes } from './routes/dashboardRoutes.js';
 import { auditRoutes } from './routes/auditRoutes.js';
 import { jobRoutes } from './routes/jobRoutes.js';
+import { userRoutes } from './routes/userRoutes.js';
 
 dotenv.config();
 
@@ -109,6 +110,7 @@ export function buildApp(): FastifyInstance {
       api.register(dashboardRoutes);
       api.register(auditRoutes);
       api.register(jobRoutes);
+      api.register(userRoutes);
     },
     { prefix: '/api/v1' }
   );

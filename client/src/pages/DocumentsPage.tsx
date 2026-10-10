@@ -107,13 +107,13 @@ export const DocumentsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
             <FolderLock className="w-6 h-6 text-brand-600" />
             Compliance Records & Document Vault
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Certified insurance binders, commercial operating permits, signed leases and fire certificates.
           </p>
         </div>
@@ -130,16 +130,16 @@ export const DocumentsPage: React.FC = () => {
 
       {/* Expiring Documents Alert Banner */}
       {expiringDocs.length > 0 && (
-        <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-between">
+        <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-amber-600 text-white rounded-xl">
               <AlertTriangle className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-sm font-bold text-amber-900">
+              <h4 className="text-sm font-bold text-amber-900 dark:text-amber-200">
                 {expiringDocs.length} Document{expiringDocs.length > 1 ? 's' : ''} Approaching Expiration (&lt;30 days)
               </h4>
-              <p className="text-xs text-amber-700">
+              <p className="text-xs text-amber-700 dark:text-amber-300">
                 Mandatory tenant liability insurance certificates or permits require urgent renewal verification.
               </p>
             </div>
@@ -148,7 +148,7 @@ export const DocumentsPage: React.FC = () => {
       )}
 
       {/* Filter and Search Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-3">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-3">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -156,13 +156,13 @@ export const DocumentsPage: React.FC = () => {
           }}
           className="flex-1 relative"
         >
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+          <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-3" />
           <input
             type="text"
             placeholder="Search document title..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </form>
 
@@ -170,7 +170,7 @@ export const DocumentsPage: React.FC = () => {
           <select
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-700 bg-slate-50 focus:outline-none"
+            className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 focus:outline-none"
           >
             <option value="">All Document Categories</option>
             <option value="LEASE_AGREEMENT">Lease Agreement</option>
@@ -183,10 +183,10 @@ export const DocumentsPage: React.FC = () => {
       </div>
 
       {/* Documents Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200 text-xs">
-            <thead className="bg-slate-50 text-slate-600 font-semibold text-left">
+          <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-xs">
+            <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-semibold text-left">
               <tr>
                 <th className="py-3.5 px-4">Title</th>
                 <th className="py-3.5 px-4">Category</th>
@@ -196,16 +196,16 @@ export const DocumentsPage: React.FC = () => {
                 <th className="py-3.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="py-10 text-center text-slate-400">
+                  <td colSpan={6} className="py-10 text-center text-slate-400 dark:text-slate-500">
                     Loading compliance documents...
                   </td>
                 </tr>
               ) : documents.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-slate-400">
+                  <td colSpan={6} className="py-12 text-center text-slate-400 dark:text-slate-500">
                     No documents found matching criteria.
                   </td>
                 </tr>
@@ -215,35 +215,35 @@ export const DocumentsPage: React.FC = () => {
                     doc.expiryDate &&
                     new Date(doc.expiryDate).getTime() - new Date().getTime() < 30 * 24 * 60 * 60 * 1000;
                   return (
-                    <tr key={doc.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3.5 px-4 font-bold text-slate-900">{doc.title}</td>
+                    <tr key={doc.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{doc.title}</td>
                       <td className="py-3.5 px-4">
-                        <span className="font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded text-[11px]">
+                        <span className="font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-[11px]">
                           {doc.documentType.replace('_', ' ')}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-600">
+                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">
                         {doc.tenant?.companyName ? (
                           <div>
-                            <span className="font-semibold text-slate-800">{doc.tenant.companyName}</span>
+                            <span className="font-semibold text-slate-800 dark:text-slate-200">{doc.tenant.companyName}</span>
                             {doc.shop?.shopNumber && (
-                              <span className="block text-[11px] text-slate-400">Unit: {doc.shop.shopNumber}</span>
+                              <span className="block text-[11px] text-slate-400 dark:text-slate-500">Unit: {doc.shop.shopNumber}</span>
                             )}
                           </div>
                         ) : (
-                          <span className="text-slate-400 italic">General Facility Record</span>
+                          <span className="text-slate-400 dark:text-slate-500 italic">General Facility Record</span>
                         )}
                       </td>
-                      <td className="py-3.5 px-4 text-slate-600 font-medium">
+                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-medium">
                         {doc.expiryDate ? new Date(doc.expiryDate).toLocaleDateString() : 'Perpetual / N/A'}
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         {isExpiringSoon ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800">
                             Expiring Soon
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-emerald-700 bg-emerald-50">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60">
                             Compliant
                           </span>
                         )}
@@ -253,7 +253,7 @@ export const DocumentsPage: React.FC = () => {
                           {canManage && (
                             <button
                               onClick={() => handleDelete(doc.id)}
-                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50"
+                              className="p-1.5 rounded-lg text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
                               title="Delete record"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -274,24 +274,24 @@ export const DocumentsPage: React.FC = () => {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Register Compliance Document">
         <form onSubmit={handleUpload} className="space-y-4 text-xs">
           <div>
-            <label className="block font-bold text-slate-700 mb-1">Document Title *</label>
+            <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Document Title *</label>
             <input
               type="text"
               required
               placeholder="e.g. 2026 Commercial General Liability Certificate"
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+              className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Document Category *</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Document Category *</label>
               <select
                 value={form.documentType}
                 onChange={(e) => setForm({ ...form, documentType: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-semibold"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs font-semibold"
               >
                 <option value="INSURANCE">Insurance Binder / Certificate</option>
                 <option value="BUSINESS_PERMIT">Operating & Trade Permit</option>
@@ -302,23 +302,23 @@ export const DocumentsPage: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Expiration Date</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Expiration Date</label>
               <input
                 type="date"
                 value={form.expiryDate}
                 onChange={(e) => setForm({ ...form, expiryDate: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Associated Tenant</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Associated Tenant</label>
               <select
                 value={form.tenantId}
                 onChange={(e) => setForm({ ...form, tenantId: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
               >
                 <option value="">Select Tenant (Optional)</option>
                 {tenants.map((t) => (
@@ -329,11 +329,11 @@ export const DocumentsPage: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Associated Shop</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Associated Shop</label>
               <select
                 value={form.shopId}
                 onChange={(e) => setForm({ ...form, shopId: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
               >
                 <option value="">Select Shop Unit (Optional)</option>
                 {shops.map((s) => (
@@ -345,11 +345,11 @@ export const DocumentsPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
+          <div className="pt-3 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 rounded-xl border text-slate-600 font-semibold"
+              className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold"
             >
               Cancel
             </button>

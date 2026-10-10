@@ -6,6 +6,9 @@
   body {
     @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-150;
   }
+  input, select, textarea {
+    @apply dark:bg-slate-800 dark:border-slate-700 dark:text-white dark:placeholder-slate-400;
+  }
 }
 
 /* Custom scrollbars */

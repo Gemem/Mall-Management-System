@@ -99,13 +99,13 @@ export const FloorsPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            <Layers className="w-6 h-6 text-brand-600" />
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            <Layers className="w-6 h-6 text-brand-600 dark:text-brand-400" />
             Floors & Architectural Sections
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Configure multi-tier floor levels, arcade wings, concourses and section subdivisions.
           </p>
         </div>
@@ -123,20 +123,20 @@ export const FloorsPage: React.FC = () => {
       {/* Floors Cards */}
       <div className="space-y-4">
         {floors.map((floor) => (
-          <div key={floor.id} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div key={floor.id} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white font-extrabold text-sm">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 dark:bg-brand-600 text-white font-extrabold text-sm">
                   L{floor.floorNumber}
                 </span>
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">{floor.name}</h3>
-                  <p className="text-xs text-slate-500">{floor.description || 'General retail arcade level'}</p>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">{floor.name}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{floor.description || 'General retail arcade level'}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+                <span className="text-xs font-semibold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
                   {floor._count?.shops || 0} Registered Units
                 </span>
                 {canManage && (
@@ -145,15 +145,15 @@ export const FloorsPage: React.FC = () => {
                       setTargetFloorId(floor.id);
                       setIsSectionModalOpen(true);
                     }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-bold transition-colors"
                   >
-                    <Plus className="w-3.5 h-3.5 text-brand-600" /> Add Section
+                    <Plus className="w-3.5 h-3.5 text-brand-600 dark:text-brand-400" /> Add Section
                   </button>
                 )}
                 {user?.role === 'MALL_OWNER' && (floor._count?.shops || 0) === 0 && (
                   <button
                     onClick={() => handleDeleteFloor(floor.id)}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50 transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -163,24 +163,24 @@ export const FloorsPage: React.FC = () => {
 
             {/* Sections under this floor */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
                 Designated Sections & Wings
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 {floor.sections && floor.sections.length > 0 ? (
                   floor.sections.map((sec) => (
-                    <div key={sec.id} className="p-3.5 rounded-xl border border-slate-100 bg-slate-50 text-xs space-y-1">
-                      <div className="flex items-center justify-between font-bold text-slate-900">
+                    <div key={sec.id} className="p-3.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 text-xs space-y-1">
+                      <div className="flex items-center justify-between font-bold text-slate-900 dark:text-white">
                         <span>{sec.name}</span>
-                        <span className="text-[10px] font-mono bg-white px-2 py-0.5 rounded border border-slate-200">
+                        <span className="text-[10px] font-mono bg-white dark:bg-slate-900 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">
                           {sec.code}
                         </span>
                       </div>
-                      <p className="text-[11px] text-slate-500">{sec.description || 'Retail corridor'}</p>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400">{sec.description || 'Retail corridor'}</p>
                     </div>
                   ))
                 ) : (
-                  <div className="col-span-full py-3 text-center text-xs text-slate-400 italic">
+                  <div className="col-span-full py-3 text-center text-xs text-slate-400 dark:text-slate-500 italic">
                     No specific sections mapped. Units are positioned on the open concourse.
                   </div>
                 )}
@@ -194,7 +194,7 @@ export const FloorsPage: React.FC = () => {
       <Modal isOpen={isFloorModalOpen} onClose={() => setIsFloorModalOpen(false)} title="Register Floor Level">
         <form onSubmit={handleCreateFloor} className="space-y-4 text-xs">
           <div>
-            <label className="block font-bold text-slate-700 mb-1">Floor Level Number *</label>
+            <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Floor Level Number *</label>
             <input
               type="number"
               required
@@ -204,7 +204,7 @@ export const FloorsPage: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block font-bold text-slate-700 mb-1">Floor Display Name *</label>
+            <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Floor Display Name *</label>
             <input
               type="text"
               required
@@ -215,7 +215,7 @@ export const FloorsPage: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block font-bold text-slate-700 mb-1">Description</label>
+            <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Description</label>
             <textarea
               rows={2}
               placeholder="Commercial focus, anchor tenants, terrace access..."
@@ -224,15 +224,15 @@ export const FloorsPage: React.FC = () => {
               className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
             />
           </div>
-          <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
+          <div className="pt-3 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={() => setIsFloorModalOpen(false)}
-              className="px-4 py-2 rounded-xl border text-slate-600 font-semibold"
+              className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800"
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 rounded-xl bg-brand-600 text-white font-bold">
+            <button type="submit" className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold">
               Save Floor
             </button>
           </div>
@@ -243,7 +243,7 @@ export const FloorsPage: React.FC = () => {
       <Modal isOpen={isSectionModalOpen} onClose={() => setIsSectionModalOpen(false)} title="Add Section to Floor">
         <form onSubmit={handleCreateSection} className="space-y-4 text-xs">
           <div>
-            <label className="block font-bold text-slate-700 mb-1">Section Name *</label>
+            <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Section Name *</label>
             <input
               type="text"
               required
@@ -254,7 +254,7 @@ export const FloorsPage: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block font-bold text-slate-700 mb-1">Section Code *</label>
+            <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Section Code *</label>
             <input
               type="text"
               required
@@ -265,7 +265,7 @@ export const FloorsPage: React.FC = () => {
             />
           </div>
           <div>
-            <label className="block font-bold text-slate-700 mb-1">Description</label>
+            <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Description</label>
             <input
               type="text"
               placeholder="e.g. Luxury boutiques corridor"
@@ -274,15 +274,15 @@ export const FloorsPage: React.FC = () => {
               className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
             />
           </div>
-          <div className="pt-3 flex justify-end gap-2 border-t border-slate-100">
+          <div className="pt-3 flex justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={() => setIsSectionModalOpen(false)}
-              className="px-4 py-2 rounded-xl border text-slate-600 font-semibold"
+              className="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-50 dark:hover:bg-slate-800"
             >
               Cancel
             </button>
-            <button type="submit" className="px-4 py-2 rounded-xl bg-brand-600 text-white font-bold">
+            <button type="submit" className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold">
               Save Section
             </button>
           </div>

@@ -227,6 +227,8 @@ async function main() {
       role: 'MALL_OWNER',
       phone: '+1 (555) 880-0001',
       avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150',
+      isApproved: true,
+      approvedAt: new Date(),
     },
   });
 
@@ -238,6 +240,9 @@ async function main() {
       role: 'MALL_MANAGER',
       phone: '+1 (555) 880-0002',
       avatarUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150',
+      isApproved: true,
+      approvedAt: new Date(),
+      approvedById: ownerUser.id,
     },
   });
 
@@ -249,6 +254,9 @@ async function main() {
       role: 'ACCOUNTANT',
       phone: '+1 (555) 880-0003',
       avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150',
+      isApproved: true,
+      approvedAt: new Date(),
+      approvedById: ownerUser.id,
     },
   });
 
@@ -260,6 +268,9 @@ async function main() {
       role: 'MAINTENANCE',
       phone: '+1 (555) 880-0004',
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      isApproved: true,
+      approvedAt: new Date(),
+      approvedById: ownerUser.id,
     },
   });
 
@@ -272,6 +283,33 @@ async function main() {
       tenantId: tenant1.id,
       phone: '+1 (555) 301-8822',
       avatarUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150',
+      isApproved: true,
+      approvedAt: new Date(),
+      approvedById: ownerUser.id,
+    },
+  });
+
+  // Sample Pending Approval Users (to demonstrate Owner approval workflow)
+  await prisma.user.create({
+    data: {
+      email: 'lucas.vance@techhorizon.com',
+      name: 'Lucas Vance',
+      passwordHash: tenantPasswordHash,
+      role: 'TENANT',
+      tenantId: tenant2.id,
+      phone: '+1 (555) 412-9901',
+      isApproved: false, // Pending Owner Approval
+    },
+  });
+
+  await prisma.user.create({
+    data: {
+      email: 'samuel.chen@facilitytech.com',
+      name: 'Samuel Chen (HVAC Tech)',
+      passwordHash: passwordHash,
+      role: 'MAINTENANCE',
+      phone: '+1 (555) 902-3344',
+      isApproved: false, // Pending Owner Approval
     },
   });
 

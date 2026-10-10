@@ -7,8 +7,13 @@ export interface User {
   role: UserRole;
   phone?: string | null;
   avatarUrl?: string | null;
+  isActive?: boolean;
+  isApproved?: boolean;
+  approvedAt?: string | null;
+  approvedById?: string | null;
   tenantId?: string | null;
   tenant?: Tenant | null;
+  createdAt?: string;
 }
 
 export interface Mall {

@@ -168,13 +168,13 @@ export const LeasesPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            <FileText className="w-6 h-6 text-brand-600" />
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            <FileText className="w-6 h-6 text-brand-600 dark:text-brand-400" />
             Lease Agreements & Legal Contracts
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Contractual covenants, term durations, deposit management, rent schedules and renewals.
           </p>
         </div>
@@ -190,7 +190,7 @@ export const LeasesPage: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-3">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-3">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -204,7 +204,7 @@ export const LeasesPage: React.FC = () => {
             placeholder="Search by lease #, tenant company, or shop number..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </form>
 
@@ -212,7 +212,7 @@ export const LeasesPage: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-700 bg-slate-50 focus:outline-none"
+            className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 focus:outline-none"
           >
             <option value="">All Contracts</option>
             <option value="ACTIVE">Active</option>
@@ -224,10 +224,10 @@ export const LeasesPage: React.FC = () => {
       </div>
 
       {/* Leases Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200 text-xs">
-            <thead className="bg-slate-50 text-slate-600 font-semibold text-left">
+          <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-xs">
+            <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-semibold text-left">
               <tr>
                 <th className="py-3.5 px-4">Lease #</th>
                 <th className="py-3.5 px-4">Tenant / Brand</th>
@@ -239,7 +239,7 @@ export const LeasesPage: React.FC = () => {
                 {canManage && <th className="py-3.5 px-4 text-right">Actions</th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
               {loading ? (
                 <tr>
                   <td colSpan={8} className="py-10 text-center text-slate-400">
@@ -256,47 +256,47 @@ export const LeasesPage: React.FC = () => {
                 leases.map((lease) => {
                   const isExpiring = lease.status === 'EXPIRING';
                   return (
-                    <tr key={lease.id} className="hover:bg-slate-50/70 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900">{lease.leaseNumber}</td>
+                    <tr key={lease.id} className="hover:bg-slate-50/70 dark:hover:bg-slate-800/60 transition-colors">
+                      <td className="py-3.5 px-4 font-mono font-bold text-slate-900 dark:text-white">{lease.leaseNumber}</td>
                       <td className="py-3.5 px-4">
-                        <div className="font-bold text-slate-900">{lease.tenant?.companyName}</div>
-                        <div className="text-[11px] text-slate-500">{lease.tenant?.contactPerson}</div>
+                        <div className="font-bold text-slate-900 dark:text-white">{lease.tenant?.companyName}</div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400">{lease.tenant?.contactPerson}</div>
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="font-extrabold text-slate-900">{lease.shop?.shopNumber}</span>
-                        <span className="block text-[11px] text-slate-400">{lease.shop?.floor?.name}</span>
+                        <span className="font-extrabold text-slate-900 dark:text-white">{lease.shop?.shopNumber}</span>
+                        <span className="block text-[11px] text-slate-400 dark:text-slate-500">{lease.shop?.floor?.name}</span>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-600">
+                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300">
                         <div>
                           {new Date(lease.startDate).toLocaleDateString()} —{' '}
-                          <span className={isExpiring ? 'font-bold text-amber-700' : ''}>
+                          <span className={isExpiring ? 'font-bold text-amber-700 dark:text-amber-400' : ''}>
                             {new Date(lease.endDate).toLocaleDateString()}
                           </span>
                         </div>
                         {isExpiring && (
-                          <span className="inline-flex items-center gap-1 text-[10px] text-amber-700 font-bold mt-0.5">
+                          <span className="inline-flex items-center gap-1 text-[10px] text-amber-700 dark:text-amber-400 font-bold mt-0.5">
                             <Clock className="w-3 h-3" /> Expiration Imminent
                           </span>
                         )}
                       </td>
                       <td className="py-3.5 px-4 text-right">
-                        <span className="font-bold text-slate-900">${(lease.rentAmount / 100).toLocaleString()}</span>
-                        <span className="text-[10px] text-slate-400 block">+ ${(lease.recurringCharges / 100).toLocaleString()} charges</span>
+                        <span className="font-bold text-slate-900 dark:text-white">${(lease.rentAmount / 100).toLocaleString()}</span>
+                        <span className="text-[10px] text-slate-400 dark:text-slate-500 block">+ ${(lease.recurringCharges / 100).toLocaleString()} charges</span>
                       </td>
                       <td className="py-3.5 px-4 text-right">
-                        <span className="font-semibold text-slate-700">${(lease.depositAmount / 100).toLocaleString()}</span>
-                        <span className={`text-[10px] block ${lease.depositPaid ? 'text-emerald-600 font-bold' : 'text-rose-500'}`}>
+                        <span className="font-semibold text-slate-700 dark:text-slate-200">${(lease.depositAmount / 100).toLocaleString()}</span>
+                        <span className={`text-[10px] block ${lease.depositPaid ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-rose-500 dark:text-rose-400'}`}>
                           {lease.depositPaid ? 'Paid' : 'Unpaid'}
                         </span>
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         <span
-                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${
                             lease.status === 'ACTIVE'
-                              ? 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border-emerald-800'
                               : lease.status === 'EXPIRING'
-                              ? 'bg-amber-100 text-amber-800 animate-pulse'
-                              : 'bg-slate-100 text-slate-700'
+                              ? 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-950/80 dark:text-amber-300 dark:border-amber-800 animate-pulse'
+                              : 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700'
                           }`}
                         >
                           {lease.status}
@@ -309,14 +309,14 @@ export const LeasesPage: React.FC = () => {
                               <>
                                 <button
                                   onClick={() => openRenewModal(lease)}
-                                  className="px-2.5 py-1 rounded-lg border border-slate-200 text-brand-700 hover:bg-brand-50 text-[11px] font-bold transition-colors"
+                                  className="px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-brand-700 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-950/50 text-[11px] font-bold transition-colors"
                                   title="Renew contract & amend terms"
                                 >
                                   Renew
                                 </button>
                                 <button
                                   onClick={() => openTerminateModal(lease)}
-                                  className="px-2 py-1 rounded-lg border border-slate-200 text-rose-600 hover:bg-rose-50 text-[11px] font-semibold transition-colors"
+                                  className="px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 text-[11px] font-semibold transition-colors"
                                   title="Terminate lease"
                                 >
                                   Terminate

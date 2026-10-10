@@ -151,13 +151,13 @@ export const MaintenancePage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
-          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-            <Wrench className="w-6 h-6 text-brand-600" />
+          <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            <Wrench className="w-6 h-6 text-brand-600 dark:text-brand-400" />
             Facility Maintenance Work Orders
           </h1>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
             Service requests, repair dispatches, mechanical SLAs and staff resolution logs.
           </p>
         </div>
@@ -171,7 +171,7 @@ export const MaintenancePage: React.FC = () => {
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-3">
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row gap-3">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -185,7 +185,7 @@ export const MaintenancePage: React.FC = () => {
             placeholder="Search by ticket #, description, title, or shop unit..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs focus:outline-none focus:ring-2 focus:ring-brand-500"
           />
         </form>
 
@@ -193,7 +193,7 @@ export const MaintenancePage: React.FC = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-700 bg-slate-50 focus:outline-none"
+            className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 focus:outline-none"
           >
             <option value="">All Statuses</option>
             <option value="OPEN">Open</option>
@@ -206,7 +206,7 @@ export const MaintenancePage: React.FC = () => {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-700 bg-slate-50 focus:outline-none"
+            className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-800 focus:outline-none"
           >
             <option value="">All Priorities</option>
             <option value="URGENT">Urgent SLA</option>
@@ -220,9 +220,9 @@ export const MaintenancePage: React.FC = () => {
       {/* Tickets List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {loading ? (
-          <div className="col-span-full py-12 text-center text-slate-400">Loading work orders...</div>
+          <div className="col-span-full py-12 text-center text-slate-400 dark:text-slate-500">Loading work orders...</div>
         ) : tickets.length === 0 ? (
-          <div className="col-span-full py-12 text-center text-slate-400">
+          <div className="col-span-full py-12 text-center text-slate-400 dark:text-slate-500">
             No maintenance tickets found matching active criteria.
           </div>
         ) : (
@@ -230,23 +230,23 @@ export const MaintenancePage: React.FC = () => {
             <div
               key={t.id}
               onClick={() => handleViewTicket(t)}
-              className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-brand-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-4"
+              className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:border-brand-500 dark:hover:border-brand-500 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-4"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold text-slate-500">{t.ticketNumber}</span>
+                  <span className="font-mono text-xs font-bold text-slate-500 dark:text-slate-400">{t.ticketNumber}</span>
                   <div className="flex items-center gap-1.5">
                     <PriorityBadge priority={t.priority} />
                     <MaintenanceStatusBadge status={t.status} />
                   </div>
                 </div>
 
-                <h3 className="font-bold text-slate-900 text-sm mt-3 line-clamp-1">{t.title}</h3>
-                <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">{t.description}</p>
+                <h3 className="font-bold text-slate-900 dark:text-white text-sm mt-3 line-clamp-1">{t.title}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2 leading-relaxed">{t.description}</p>
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                <span className="font-semibold text-slate-800">Unit: {t.shop?.shopNumber}</span>
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                <span className="font-semibold text-slate-800 dark:text-slate-200">Unit: {t.shop?.shopNumber}</span>
                 <span className="flex items-center gap-1 text-[11px]">
                   <MessageSquare className="w-3.5 h-3.5" /> {t._count?.comments || 0} notes
                 </span>
@@ -350,52 +350,52 @@ export const MaintenancePage: React.FC = () => {
       {/* Drawer: Detailed Ticket View with Comments & Status Workflow */}
       {selectedTicket && (
         <div className="fixed inset-0 z-50 overflow-hidden bg-slate-900/50 backdrop-blur-sm flex justify-end">
-          <div className="w-full max-w-xl bg-white h-full shadow-2xl p-6 overflow-y-auto space-y-6">
-            <div className="flex items-center justify-between border-b pb-4">
+          <div className="w-full max-w-xl bg-white dark:bg-slate-900 h-full shadow-2xl p-6 overflow-y-auto space-y-6 border-l border-slate-200 dark:border-slate-800">
+            <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4">
               <div>
                 <span className="font-mono text-xs font-bold text-slate-400">{selectedTicket.ticketNumber}</span>
-                <h2 className="text-lg font-extrabold text-slate-900">{selectedTicket.title}</h2>
+                <h2 className="text-lg font-extrabold text-slate-900 dark:text-white">{selectedTicket.title}</h2>
               </div>
               <button
                 onClick={() => setSelectedTicket(null)}
-                className="px-3 py-1.5 rounded-lg border text-xs font-bold text-slate-600 hover:bg-slate-100"
+                className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
               >
                 Close Drawer
               </button>
             </div>
 
             {/* Badges and Unit */}
-            <div className="grid grid-cols-3 gap-3 bg-slate-50 p-3 rounded-xl border text-xs">
+            <div className="grid grid-cols-3 gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700/60 text-xs">
               <div>
-                <span className="text-slate-400 block text-[10px]">Shop Unit</span>
-                <span className="font-bold text-slate-900">{selectedTicket.shop?.shopNumber}</span>
+                <span className="text-slate-400 dark:text-slate-500 block text-[10px]">Shop Unit</span>
+                <span className="font-bold text-slate-900 dark:text-white">{selectedTicket.shop?.shopNumber}</span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Priority</span>
+                <span className="text-slate-400 dark:text-slate-500 block text-[10px]">Priority</span>
                 <PriorityBadge priority={selectedTicket.priority} />
               </div>
               <div>
-                <span className="text-slate-400 block text-[10px]">Status</span>
+                <span className="text-slate-400 dark:text-slate-500 block text-[10px]">Status</span>
                 <MaintenanceStatusBadge status={selectedTicket.status} />
               </div>
             </div>
 
-            <div className="text-xs text-slate-600 leading-relaxed bg-slate-50/50 p-3.5 rounded-xl border">
-              <span className="font-bold text-slate-800 block mb-1">Issue Description</span>
+            <div className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50/50 dark:bg-slate-800/40 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/60">
+              <span className="font-bold text-slate-800 dark:text-slate-200 block mb-1">Issue Description</span>
               {selectedTicket.description}
             </div>
 
             {/* Status Transition (Staff only) */}
             {isStaff && (
-              <form onSubmit={handleUpdateStatus} className="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3 text-xs">
-                <span className="font-bold text-slate-900 block">Update Ticket Status & Resolution</span>
+              <form onSubmit={handleUpdateStatus} className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 space-y-3 text-xs">
+                <span className="font-bold text-slate-900 dark:text-white block">Update Ticket Status & Resolution</span>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-slate-600 font-semibold mb-1">Ticket Status</label>
+                    <label className="block text-slate-600 dark:text-slate-300 font-semibold mb-1">Ticket Status</label>
                     <select
                       value={statusUpdateForm.status}
                       onChange={(e) => setStatusUpdateForm({ ...statusUpdateForm, status: e.target.value as MaintenanceStatus })}
-                      className="w-full p-2 rounded-lg border text-xs font-bold"
+                      className="w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs font-bold"
                     >
                       <option value="OPEN">Open</option>
                       <option value="ASSIGNED">Assigned</option>
@@ -406,28 +406,28 @@ export const MaintenancePage: React.FC = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-slate-600 font-semibold mb-1">Cost Incurred ($)</label>
+                    <label className="block text-slate-600 dark:text-slate-300 font-semibold mb-1">Cost Incurred ($)</label>
                     <input
                       type="number"
                       step="0.01"
                       value={statusUpdateForm.estimatedCost}
                       onChange={(e) => setStatusUpdateForm({ ...statusUpdateForm, estimatedCost: Number(e.target.value) })}
-                      className="w-full p-2 rounded-lg border text-xs font-bold"
+                      className="w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs font-bold"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-slate-600 font-semibold mb-1">Resolution Details</label>
+                  <label className="block text-slate-600 dark:text-slate-300 font-semibold mb-1">Resolution Details</label>
                   <input
                     type="text"
                     placeholder="Work performed, replaced part numbers, sign-off..."
                     value={statusUpdateForm.resolutionNotes}
                     onChange={(e) => setStatusUpdateForm({ ...statusUpdateForm, resolutionNotes: e.target.value })}
-                    className="w-full p-2 rounded-lg border text-xs"
+                    className="w-full p-2 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
                   />
                 </div>
                 <div className="flex justify-end">
-                  <button type="submit" className="px-3 py-1.5 rounded-lg bg-slate-900 text-white font-bold text-xs">
+                  <button type="submit" className="px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-brand-600 dark:hover:bg-brand-700 text-white font-bold text-xs">
                     Save Resolution Update
                   </button>
                 </div>
@@ -436,7 +436,7 @@ export const MaintenancePage: React.FC = () => {
 
             {/* Comments Timeline */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 Work Notes & Activity Log
               </h4>
               <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
@@ -445,24 +445,24 @@ export const MaintenancePage: React.FC = () => {
                     key={c.id}
                     className={`p-3 rounded-xl border text-xs space-y-1 ${
                       c.isInternal
-                        ? 'bg-amber-50/60 border-amber-200 text-amber-900'
-                        : 'bg-white border-slate-200 text-slate-800'
+                        ? 'bg-amber-50/60 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900/50 text-amber-900 dark:text-amber-200'
+                        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 font-bold text-slate-900">
+                      <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
                         <span>{c.user?.name}</span>
                         {c.isInternal && (
-                          <span className="flex items-center gap-0.5 text-[10px] text-amber-700 bg-amber-100 px-1.5 py-0.5 rounded">
+                          <span className="flex items-center gap-0.5 text-[10px] text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/80 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-800">
                             <Lock className="w-2.5 h-2.5" /> Staff Internal
                           </span>
                         )}
                       </div>
-                      <span className="text-[10px] text-slate-400">
+                      <span className="text-[10px] text-slate-400 dark:text-slate-500">
                         {new Date(c.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </span>
                     </div>
-                    <p className="text-slate-600">{c.message}</p>
+                    <p className="text-slate-600 dark:text-slate-300">{c.message}</p>
                   </div>
                 ))}
               </div>
@@ -475,14 +475,14 @@ export const MaintenancePage: React.FC = () => {
                     placeholder="Type work note or tenant response..."
                     value={commentText}
                     onChange={(e) => setCommentText(e.target.value)}
-                    className="flex-1 p-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-brand-500"
+                    className="flex-1 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs focus:ring-2 focus:ring-brand-500"
                   />
                   <button type="submit" className="p-2.5 bg-brand-600 text-white rounded-xl hover:bg-brand-700">
                     <Send className="w-4 h-4" />
                   </button>
                 </div>
                 {isStaff && (
-                  <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+                  <label className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-400 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={isInternalComment}

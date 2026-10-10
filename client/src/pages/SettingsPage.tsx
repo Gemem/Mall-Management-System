@@ -71,87 +71,87 @@ export const SettingsPage: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <div className="border-b border-slate-200 pb-5">
-        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
+      <div className="border-b border-slate-200 dark:border-slate-800 pb-5">
+        <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
           <Settings className="w-6 h-6 text-brand-600" />
           Mall Configuration & Operational Parameters
         </h1>
-        <p className="text-sm text-slate-500 mt-1">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           Identity, financial currency defaults, timezones, legal tax IDs and operational covenants.
         </p>
       </div>
 
-      <form onSubmit={handleSave} className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6 text-xs">
+      <form onSubmit={handleSave} className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-6 text-xs">
         {/* Mall Identity */}
         <div>
-          <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
             <Building2 className="w-4 h-4 text-brand-600" /> Mall Property Profile
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Mall Commercial Name *</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Mall Commercial Name *</label>
               <input
                 type="text"
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-semibold"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs font-semibold"
               />
             </div>
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Brand Tagline</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Brand Tagline</label>
               <input
                 type="text"
                 value={form.tagline}
                 onChange={(e) => setForm({ ...form, tagline: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
               />
             </div>
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Management Contact Email *</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Management Contact Email *</label>
               <input
                 type="email"
                 required
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
               />
             </div>
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Operations Telephone *</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Operations Telephone *</label>
               <input
                 type="text"
                 required
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
               />
             </div>
             <div className="sm:col-span-2">
-              <label className="block font-bold text-slate-700 mb-1">Physical Address *</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Physical Address *</label>
               <input
                 type="text"
                 required
                 value={form.address}
                 onChange={(e) => setForm({ ...form, address: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
               />
             </div>
           </div>
         </div>
 
         {/* Financial & Regional Defaults */}
-        <div className="pt-4 border-t border-slate-100">
-          <h3 className="text-sm font-bold text-slate-900 mb-3 flex items-center gap-2">
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
             <Globe className="w-4 h-4 text-brand-600" /> Currency & Regional Settings
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Base Currency Code</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Base Currency Code</label>
               <select
                 value={form.currency}
                 onChange={(e) => setForm({ ...form, currency: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-semibold"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs font-semibold"
               >
                 <option value="USD">USD (US Dollar)</option>
                 <option value="EUR">EUR (Euro)</option>
@@ -161,21 +161,21 @@ export const SettingsPage: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Currency Symbol</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Currency Symbol</label>
               <input
                 type="text"
                 value={form.currencySymbol}
                 onChange={(e) => setForm({ ...form, currencySymbol: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs font-bold"
               />
             </div>
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Operational Timezone</label>
+              <label className="block font-bold text-slate-700 dark:text-slate-300 mb-1">Operational Timezone</label>
               <input
                 type="text"
                 value={form.timezone}
                 onChange={(e) => setForm({ ...form, timezone: e.target.value })}
-                className="w-full p-2.5 rounded-xl border border-slate-200 text-xs"
+                className="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white text-xs"
               />
             </div>
           </div>

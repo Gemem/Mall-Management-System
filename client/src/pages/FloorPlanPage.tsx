@@ -61,18 +61,18 @@ export const FloorPlanPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="border-b border-slate-200 pb-5">
-        <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-2">
-          <Map className="w-6 h-6 text-brand-600" />
+      <div className="border-b border-slate-200 dark:border-slate-800 pb-5">
+        <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+          <Map className="w-6 h-6 text-brand-600 dark:text-brand-400" />
           Interactive Architectural Floor Plan
         </h1>
-        <p className="text-sm text-slate-500 mt-1">
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
           Visual multi-level shopping arcade map. Select any retail block to inspect tenancy, occupancy boundaries and operational status.
         </p>
       </div>
 
       {/* Floor Selection Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200">
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 dark:border-slate-800">
         {floors.map((f) => (
           <button
             key={f.id}
@@ -82,8 +82,8 @@ export const FloorPlanPage: React.FC = () => {
             }}
             className={`px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
               selectedFloorId === f.id
-                ? 'bg-slate-900 text-white shadow-md'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-slate-900 dark:bg-brand-600 text-white shadow-md'
+                : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             Level {f.floorNumber}: {f.name}
@@ -93,21 +93,21 @@ export const FloorPlanPage: React.FC = () => {
 
       {/* Floor Overview Bar */}
       {activeFloor && (
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+        <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <div>
-            <span className="font-extrabold text-slate-900 text-sm">{activeFloor.name}</span>
-            <p className="text-slate-500 mt-0.5">{activeFloor.description}</p>
+            <span className="font-extrabold text-slate-900 dark:text-white text-sm">{activeFloor.name}</span>
+            <p className="text-slate-500 dark:text-slate-400 mt-0.5">{activeFloor.description}</p>
           </div>
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5 font-bold text-emerald-700">
+            <div className="flex items-center gap-1.5 font-bold text-emerald-700 dark:text-emerald-400">
               <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
               <span>{occupiedCount} Occupied</span>
             </div>
-            <div className="flex items-center gap-1.5 font-bold text-sky-700">
+            <div className="flex items-center gap-1.5 font-bold text-sky-700 dark:text-sky-400">
               <span className="h-2.5 w-2.5 rounded-full bg-sky-500" />
               <span>{vacantCount} Vacant</span>
             </div>
-            <div className="flex items-center gap-1.5 font-bold text-amber-700">
+            <div className="flex items-center gap-1.5 font-bold text-amber-700 dark:text-amber-400">
               <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
               <span>{reservedCount} Reserved</span>
             </div>
@@ -198,14 +198,14 @@ export const FloorPlanPage: React.FC = () => {
         </div>
 
         {/* Selected Shop Unit Details Card */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col justify-between">
+        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
           {selectedShop ? (
             <div className="space-y-5">
-              <div className="flex items-start justify-between border-b pb-4">
+              <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Selected Unit</span>
-                  <h3 className="text-2xl font-black text-slate-900">{selectedShop.shopNumber}</h3>
-                  <p className="text-xs font-semibold text-slate-600 mt-0.5">{selectedShop.name}</p>
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Selected Unit</span>
+                  <h3 className="text-2xl font-black text-slate-900 dark:text-white">{selectedShop.shopNumber}</h3>
+                  <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mt-0.5">{selectedShop.name}</p>
                 </div>
                 <div className="text-right space-y-1">
                   <OccupancyBadge status={selectedShop.occupancyStatus} />
@@ -214,48 +214,48 @@ export const FloorPlanPage: React.FC = () => {
               </div>
 
               {/* Physical Specifications */}
-              <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 p-3.5 rounded-2xl border">
+              <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700">
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Floor Area</span>
-                  <span className="font-bold text-slate-900">{selectedShop.areaSqFt} sq ft</span>
+                  <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Floor Area</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{selectedShop.areaSqFt} sq ft</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Category</span>
-                  <span className="font-bold text-slate-900">{selectedShop.businessCategory}</span>
+                  <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Category</span>
+                  <span className="font-bold text-slate-900 dark:text-white">{selectedShop.businessCategory}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Base Monthly Rent</span>
-                  <span className="font-bold text-slate-900">${(selectedShop.baseRent / 100).toLocaleString()}</span>
+                  <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Base Monthly Rent</span>
+                  <span className="font-bold text-slate-900 dark:text-white">${(selectedShop.baseRent / 100).toLocaleString()}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[11px]">Service Charges</span>
-                  <span className="font-bold text-slate-900">${(selectedShop.recurringCharges / 100).toLocaleString()}/mo</span>
+                  <span className="text-slate-400 dark:text-slate-500 block text-[11px]">Service Charges</span>
+                  <span className="font-bold text-slate-900 dark:text-white">${(selectedShop.recurringCharges / 100).toLocaleString()}/mo</span>
                 </div>
               </div>
 
               {/* Tenant Occupant Info */}
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
                   Occupant & Active Lease
                 </h4>
                 {selectedShop.leases && selectedShop.leases.length > 0 ? (
-                  <div className="p-4 rounded-2xl border border-emerald-200 bg-emerald-50/50 space-y-2 text-xs">
-                    <div className="flex items-center justify-between font-bold text-slate-900">
+                  <div className="p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800/60 bg-emerald-50/50 dark:bg-emerald-950/40 space-y-2 text-xs">
+                    <div className="flex items-center justify-between font-bold text-slate-900 dark:text-white">
                       <span>{selectedShop.leases[0].tenant?.companyName}</span>
-                      <span className="text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded text-[11px]">
+                      <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 px-2 py-0.5 rounded text-[11px] border border-emerald-200 dark:border-emerald-800">
                         {selectedShop.leases[0].leaseNumber}
                       </span>
                     </div>
-                    <p className="text-slate-600">
+                    <p className="text-slate-600 dark:text-slate-300">
                       Contact: {selectedShop.leases[0].tenant?.contactPerson} ({selectedShop.leases[0].tenant?.phone})
                     </p>
-                    <p className="text-slate-500 text-[11px]">
+                    <p className="text-slate-500 dark:text-slate-400 text-[11px]">
                       Lease Term: {new Date(selectedShop.leases[0].startDate).toLocaleDateString()} to{' '}
                       {new Date(selectedShop.leases[0].endDate).toLocaleDateString()}
                     </p>
                   </div>
                 ) : (
-                  <div className="p-4 rounded-2xl border border-dashed text-center text-xs text-slate-400">
+                  <div className="p-4 rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 text-center text-xs text-slate-400 dark:text-slate-500">
                     No active tenant. Unit is currently vacant and available for leasing.
                   </div>
                 )}
@@ -265,7 +265,7 @@ export const FloorPlanPage: React.FC = () => {
               <div className="pt-2">
                 <Link
                   to={`/shops`}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold shadow-md transition-colors"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-900 dark:bg-brand-600 hover:bg-slate-800 dark:hover:bg-brand-700 text-white text-xs font-bold shadow-md transition-colors"
                 >
                   <Store className="w-4 h-4" /> Open Full Shop Records
                 </Link>
@@ -273,11 +273,11 @@ export const FloorPlanPage: React.FC = () => {
             </div>
           ) : (
             <div className="h-full flex flex-col items-center justify-center text-center p-8 space-y-3">
-              <div className="p-4 rounded-full bg-slate-100 text-slate-400">
+              <div className="p-4 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500">
                 <Store className="w-8 h-8" />
               </div>
-              <h4 className="font-bold text-slate-800 text-sm">Select a Retail Unit</h4>
-              <p className="text-xs text-slate-400 max-w-xs">
+              <h4 className="font-bold text-slate-800 dark:text-slate-200 text-sm">Select a Retail Unit</h4>
+              <p className="text-xs text-slate-400 dark:text-slate-500 max-w-xs">
                 Click any shop block on the schematic layout to view its occupancy status, tenant profile, and lease details.
               </p>
             </div>

@@ -137,11 +137,14 @@ model User {
   role         String   // "MALL_OWNER", "MALL_MANAGER", "ACCOUNTANT", "MAINTENANCE", "TENANT"
   phone        String?
   avatarUrl    String?
-  isActive     Boolean  @default(true)
+  isActive     Boolean   @default(true)
+  isApproved   Boolean   @default(false)
+  approvedAt   DateTime?
+  approvedById String?
   tenantId     String?
-  tenant       Tenant?  @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  tenant       Tenant?   @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   auditLogs          AuditLog[]
   maintenanceAssigned MaintenanceTicket[] @relation("TicketAssignee")

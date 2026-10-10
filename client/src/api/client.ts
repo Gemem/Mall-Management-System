@@ -64,12 +64,56 @@ class ApiClient {
     return data;
   }
 
+  async register(data: { email: string; password: string; name: string; role?: string; phone?: string; tenantId?: string }) {
+    return this.request<{ message: string; user: any }>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
   async getCurrentUser() {
     return this.request<any>('/auth/me');
   }
 
   async getDemoAccounts() {
     return this.request<{ accounts: any[] }>('/auth/demo-accounts');
+  }
+
+  // Users & Approvals (Owner/Admin)
+  async getUsers() {
+    return this.request<any[]>('/users');
+  }
+
+  async createUser(data: any) {
+    return this.request<any>('/users', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async approveUser(id: string) {
+    return this.request<any>(`/users/${id}/approve`, {
+      method: 'PATCH',
+    });
+  }
+
+  async revokeUser(id: string) {
+    return this.request<any>(`/users/${id}/revoke`, {
+      method: 'PATCH',
+    });
+  }
+
+  async toggleUserStatus(id: string, isActive: boolean) {
+    return this.request<any>(`/users/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ isActive }),
+    });
+  }
+
+  async deleteUser(id: string) {
+    return this.request<{ message: string }>(`/users/${id}`, {
+      method: 'DELETE',
+    });
   }
 
   // Mall & Floors
