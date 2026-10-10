@@ -1,0 +1,21 @@
+services:
+  mall-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mall-management-app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - DATABASE_URL=file:./dev.db
+      - JWT_SECRET=mall_jwt_super_secret_production_ready_key_2026_xyz
+      - NODE_ENV=production
+    volumes:
+      - mall-data:/app/server/prisma
+      - mall-uploads:/app/uploads
+
+volumes:
+  mall-data:
+  mall-uploads:

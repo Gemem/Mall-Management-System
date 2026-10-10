@@ -1,0 +1,474 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// -------------------------------------------------------------
+// Core System & Mall Setup
+// -------------------------------------------------------------
+
+model Mall {
+  id             String   @id @default(uuid())
+  name           String
+  tagline        String?
+  logoUrl        String?
+  currency       String   @default("USD")
+  currencySymbol String   @default("$")
+  timezone       String   @default("America/New_York")
+  dateFormat     String   @default("YYYY-MM-DD")
+  email          String
+  phone          String
+  address        String
+  taxId          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  floors         Floor[]
+  settings       MallSetting[]
+}
+
+model MallSetting {
+  id          String   @id @default(uuid())
+  mallId      String
+  mall        Mall     @relation(fields: [mallId], references: [id], onDelete: Cascade)
+  key         String   @unique
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+model Floor {
+  id          String    @id @default(uuid())
+  mallId      String
+  mall        Mall      @relation(fields: [mallId], references: [id], onDelete: Cascade)
+  floorNumber Int
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  sections    Section[]
+  shops       Shop[]
+
+  @@unique([mallId, floorNumber])
+}
+
+model Section {
+  id          String   @id @default(uuid())
+  floorId     String
+  floor       Floor    @relation(fields: [floorId], references: [id], onDelete: Cascade)
+  name        String
+  code        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  shops       Shop[]
+
+  @@unique([floorId, code])
+}
+
+// -------------------------------------------------------------
+// Shops & Physical Inventory
+// -------------------------------------------------------------
+
+model Shop {
+  id                String   @id @default(uuid())
+  floorId           String
+  floor             Floor    @relation(fields: [floorId], references: [id], onDelete: Cascade)
+  sectionId         String?
+  section           Section? @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+  shopNumber        String   @unique // e.g. "G-101", "L1-204"
+  name              String   // Display Name / Unit Tag
+  areaSqFt          Float
+  businessCategory  String   // e.g. "Fashion", "Dining", "Electronics"
+  description       String?
+  baseRent          Int      // Base monthly rent in cents
+  recurringCharges  Int      @default(0) // Service charge / utilities estimate in cents
+
+  // Occupancy: VACANT, RESERVED, OCCUPIED
+  occupancyStatus   String   @default("VACANT")
+
+  // Operational: NOT_APPLICABLE, NOT_YET_OPENED, OPEN, TEMPORARILY_CLOSED, UNDER_MAINTENANCE, SUSPENDED
+  operationalStatus String   @default("NOT_APPLICABLE")
+
+  currentLeaseId    String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  leases            Lease[]
+  operationalLogs   ShopOperationalLog[]
+  maintenanceTickets MaintenanceTicket[]
+  documents         Document[]
+
+  @@index([floorId])
+  @@index([occupancyStatus])
+  @@index([operationalStatus])
+}
+
+model ShopOperationalLog {
+  id             String   @id @default(uuid())
+  shopId         String
+  shop           Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  previousStatus String
+  newStatus      String
+  reason         String?
+  notes          String?
+  changedById    String?
+  changedBy      User?    @relation(fields: [changedById], references: [id], onDelete: SetNull)
+  createdAt      DateTime @default(now())
+
+  @@index([shopId])
+}
+
+// -------------------------------------------------------------
+// Users, Roles & Permissions
+// -------------------------------------------------------------
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   // "MALL_OWNER", "MALL_MANAGER", "ACCOUNTANT", "MAINTENANCE", "TENANT"
+  phone        String?
+  avatarUrl    String?
+  isActive     Boolean  @default(true)
+  tenantId     String?
+  tenant       Tenant?  @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  auditLogs          AuditLog[]
+  maintenanceAssigned MaintenanceTicket[] @relation("TicketAssignee")
+  maintenanceComments MaintenanceComment[]
+  operationalLogs    ShopOperationalLog[]
+  announcements      Announcement[]
+  notifications      Notification[]
+  documentsUploaded  Document[]
+  paymentsRecorded   Payment[]
+}
+
+// -------------------------------------------------------------
+// Tenants
+// -------------------------------------------------------------
+
+model Tenant {
+  id                 String   @id @default(uuid())
+  name               String   // Primary contact name or company representative
+  companyName        String   // Trade / Business name
+  contactPerson      String
+  email              String   @unique
+  phone              String
+  taxId              String?
+  registrationNumber String?
+  emergencyContact   String?
+  status             String   @default("ACTIVE") // ACTIVE, INACTIVE, FORMER
+  notes              String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  users              User[]
+  leases             Lease[]
+  invoices           Invoice[]
+  payments           Payment[]
+  maintenanceTickets MaintenanceTicket[]
+  documents          Document[]
+}
+
+// -------------------------------------------------------------
+// Leases & Contracts
+// -------------------------------------------------------------
+
+model Lease {
+  id                 String   @id @default(uuid())
+  leaseNumber        String   @unique // e.g. "LSE-2026-001"
+  tenantId           String
+  tenant             Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  shopId             String
+  shop               Shop     @relation(fields: [shopId], references: [id], onDelete: Restrict)
+  startDate          DateTime
+  endDate            DateTime
+  rentAmount         Int      // Rent per period in cents
+  recurringCharges   Int      @default(0) // Service charges in cents
+  depositAmount      Int      @default(0) // Security deposit in cents
+  depositPaid        Boolean  @default(false)
+  billingFrequency   String   @default("MONTHLY") // MONTHLY, QUARTERLY, ANNUALLY
+  dueDay             Int      @default(1) // Day of month rent is due (1-28)
+  gracePeriodDays    Int      @default(5) // Days before late fee applies
+  lateFeePercentage  Float    @default(5.0) // Late fee percentage (e.g. 5%)
+  status             String   @default("ACTIVE") // DRAFT, ACTIVE, EXPIRING, RENEWED, TERMINATED, EXPIRED
+  terms              String?  // Legal terms / special covenants
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  amendments         LeaseAmendment[]
+  invoices           Invoice[]
+  payments           Payment[]
+  documents          Document[]
+
+  @@index([tenantId])
+  @@index([shopId])
+  @@index([status])
+}
+
+model LeaseAmendment {
+  id              String   @id @default(uuid())
+  leaseId         String
+  lease           Lease    @relation(fields: [leaseId], references: [id], onDelete: Cascade)
+  amendmentNumber Int
+  effectiveDate   DateTime
+  previousRent    Int      // in cents
+  newRent         Int      // in cents
+  changeReason    String
+  approvedBy      String?
+  createdAt       DateTime @default(now())
+
+  @@index([leaseId])
+}
+
+// -------------------------------------------------------------
+// Billing, Invoices, Payments, Receipts & Reversals
+// -------------------------------------------------------------
+
+model Invoice {
+  id                String   @id @default(uuid())
+  invoiceNumber     String   @unique // e.g. "INV-2026-001"
+  leaseId           String
+  lease             Lease    @relation(fields: [leaseId], references: [id], onDelete: Restrict)
+  tenantId          String
+  tenant            Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  periodStart       DateTime
+  periodEnd         DateTime
+  dueDate           DateTime
+  baseRent          Int      // in cents
+  recurringCharges  Int      @default(0) // in cents
+  lateFee           Int      @default(0) // in cents
+  totalAmount       Int      // in cents
+  amountPaid        Int      @default(0) // in cents
+  amountOutstanding Int      // totalAmount - amountPaid (in cents)
+
+  // Status: UPCOMING, DUE_TODAY, PARTIALLY_PAID, PAID, OVERDUE, VOID
+  status            String   @default("UPCOMING")
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  allocations       PaymentAllocation[]
+
+  @@index([leaseId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+model Payment {
+  id              String   @id @default(uuid())
+  paymentNumber   String   @unique // e.g. "PAY-2026-001"
+  tenantId        String
+  tenant          Tenant   @relation(fields: [tenantId], references: [id], onDelete: Restrict)
+  leaseId         String?
+  lease           Lease?   @relation(fields: [leaseId], references: [id], onDelete: SetNull)
+  amount          Int      // Total payment received in cents
+  paymentMethod   String   // BANK_TRANSFER, CREDIT_CARD, CHECK, CASH, MOBILE_MONEY
+  referenceNumber String?  // Transaction reference / Check #
+  transactionDate DateTime
+  status          String   @default("POSTED") // POSTED, REVERSED
+  recordedById    String?
+  recordedBy      User?    @relation(fields: [recordedById], references: [id], onDelete: SetNull)
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  allocations     PaymentAllocation[]
+  reversal        PaymentReversal?
+  receipt         Receipt?
+
+  @@index([tenantId])
+  @@index([status])
+}
+
+model PaymentAllocation {
+  id              String   @id @default(uuid())
+  paymentId       String
+  payment         Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  invoiceId       String
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Restrict)
+  amountAllocated Int      // in cents
+  createdAt       DateTime @default(now())
+
+  @@index([paymentId])
+  @@index([invoiceId])
+}
+
+model PaymentReversal {
+  id             String   @id @default(uuid())
+  reversalNumber String   @unique // e.g. "REV-2026-001"
+  paymentId      String   @unique
+  payment        Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  reason         String
+  authorizedById String?
+  reversedAt     DateTime @default(now())
+  createdAt      DateTime @default(now())
+}
+
+model Receipt {
+  id            String   @id @default(uuid())
+  receiptNumber String   @unique // e.g. "RCP-2026-001"
+  paymentId     String   @unique
+  payment       Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  generatedAt   DateTime @default(now())
+  notes         String?
+  createdAt     DateTime @default(now())
+}
+
+// -------------------------------------------------------------
+// Maintenance Workflow
+// -------------------------------------------------------------
+
+model MaintenanceTicket {
+  id              String   @id @default(uuid())
+  ticketNumber    String   @unique // e.g. "MNT-2026-001"
+  shopId          String
+  shop            Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  tenantId        String?
+  tenant          Tenant?  @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  title           String
+  description     String
+  category        String   // PLUMBING, ELECTRICAL, HVAC, STRUCTURAL, CLEANING, SECURITY, OTHER
+  priority        String   @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+  status          String   @default("OPEN") // OPEN, ASSIGNED, IN_PROGRESS, WAITING, RESOLVED, CLOSED
+  assignedToId    String?
+  assignedTo      User?    @relation("TicketAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  resolutionNotes String?
+  estimatedCost   Int?     // in cents
+  completedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  comments        MaintenanceComment[]
+
+  @@index([shopId])
+  @@index([status])
+  @@index([priority])
+}
+
+model MaintenanceComment {
+  id         String            @id @default(uuid())
+  ticketId   String
+  ticket     MaintenanceTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  message    String
+  isInternal Boolean           @default(false)
+  createdAt  DateTime          @default(now())
+
+  @@index([ticketId])
+}
+
+// -------------------------------------------------------------
+// Announcements & In-App Notifications
+// -------------------------------------------------------------
+
+model Announcement {
+  id              String    @id @default(uuid())
+  title           String
+  content         String
+  targetScope     String    @default("ALL") // ALL, FLOOR, SECTION, TENANT
+  targetFloorId   String?
+  targetSectionId String?
+  targetTenantId  String?
+  priority        String    @default("NORMAL") // NORMAL, IMPORTANT, URGENT
+  publishedAt     DateTime  @default(now())
+  expiresAt       DateTime?
+  authorId        String?
+  author          User?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([targetScope])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   // PAYMENT_DUE, PAYMENT_RECEIVED, LEASE_EXPIRING, MAINTENANCE_UPDATE, ANNOUNCEMENT, SYSTEM
+  isRead    Boolean  @default(false)
+  linkUrl   String?
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
+
+// -------------------------------------------------------------
+// Document Management
+// -------------------------------------------------------------
+
+model Document {
+  id           String    @id @default(uuid())
+  title        String
+  documentType String    // LEASE_AGREEMENT, BUSINESS_PERMIT, INSURANCE, TAX_CERTIFICATE, INSPECTION_REPORT, RECEIPT, OTHER
+  filePath     String
+  fileUrl      String?
+  fileSize     Int       // bytes
+  mimeType     String
+  expiryDate   DateTime?
+  tenantId     String?
+  tenant       Tenant?   @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  leaseId      String?
+  lease        Lease?    @relation(fields: [leaseId], references: [id], onDelete: SetNull)
+  shopId       String?
+  shop         Shop?     @relation(fields: [shopId], references: [id], onDelete: SetNull)
+  uploadedById String?
+  uploadedBy   User?     @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([tenantId])
+  @@index([documentType])
+  @@index([expiryDate])
+}
+
+// -------------------------------------------------------------
+// Audit Logging & Background Job Visibility
+// -------------------------------------------------------------
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String   // CREATE, UPDATE, DELETE, PAYMENT_RECORDED, PAYMENT_REVERSED, STATUS_CHANGE, LOGIN, LOGOUT
+  entity    String   // Shop, Tenant, Lease, Invoice, Payment, MaintenanceTicket, Document, User
+  entityId  String?
+  details   String?  // JSON stringified payload / diff
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([entity])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model BackgroundJob {
+  id          String    @id @default(uuid())
+  jobType     String    // BILLING_GENERATION, OVERDUE_CHECK, LEASE_EXPIRY_CHECK, REMINDER_DELIVERY
+  status      String    @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  payload     String?   // JSON
+  result      String?   // JSON
+  error       String?
+  retries     Int       @default(0)
+  runAt       DateTime  @default(now())
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([jobType, status])
+}
