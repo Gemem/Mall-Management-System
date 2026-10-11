@@ -59,7 +59,7 @@ export function buildApp(): FastifyInstance {
         version: '1.0.0',
       },
       servers: [
-        { url: 'http://localhost:5000', description: 'Local Development Server' },
+        { url: process.env.PUBLIC_API_URL || '/', description: 'Mall Management API' },
       ],
       components: {
         securitySchemes: {

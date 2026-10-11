@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Starlight Galleria — Production-Ready Mall Management System (MMS)
 
 A comprehensive, enterprise-grade **Mall Management System (MMS)** engineered to govern commercial retail real estate, multiple floors and architectural sections, shop inventories, multi-year lease covenants, automated recurring rent billing, multi-obligation payment allocations, financial reversals, facility maintenance work orders, compliance document tracking, and real-time executive analytics.
@@ -195,3 +196,6 @@ Test Results:
 - `✓ test/financial_and_lease.test.ts (9 tests)`: Exact integer cents arithmetic, status determination precedence, partial payments, multi-invoice greedy FIFO allocations, payment reversal balance restorations, overlapping active lease collisions.
 - `✓ test/api_auth_and_roles.test.ts (3 tests)`: Unauthenticated request rejection, JWT issuance, and RBAC cross-tenant boundary isolation.
 - **Total: 12 tests passed (100% pass rate)**.
+=======
+# Mall-Management-System
+>>>>>>> 4b9ec11dc60fd5200627888dafb0bee95e137fab
